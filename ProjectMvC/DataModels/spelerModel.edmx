@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="FifaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Speler">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="naam" Type="varchar" MaxLength="50" />
+          <Property Name="flag" Type="varchar" MaxLength="50" />
+          <Property Name="score" Type="int" />
+          <Property Name="platform" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="StatsTeam">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="speler_id" Type="int" />
+          <Property Name="extended_id" Type="int" />
+          <Property Name="goals_per_game" Type="float" />
+          <Property Name="goals_against_per_game" Type="float" />
+          <Property Name="goal_ratio" Type="float" />
+          <Property Name="favorit_team" Type="varchar" MaxLength="50" />
+          <Property Name="scored_most_with" Type="varchar" MaxLength="50" />
+          <Property Name="most_hated_player" Type="varchar" MaxLength="50" />
+          <Property Name="most_played_against" Type="varchar" MaxLength="50" />
+          <Property Name="seasons_played" Type="int" />
+          <Property Name="seasons_played_current_division" Type="int" />
+          <Property Name="highest_division" Type="int" />
+          <Property Name="relegations" Type="int" />
+        </EntityType>
+        <EntityType Name="StatsTeamExtended">
+          <Key>
+            <PropertyRef Name="spelerId" />
+          </Key>
+          <Property Name="spelerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SeasonTeam" Type="int" />
+          <Property Name="WinsTeam" Type="int" />
+          <Property Name="LosesTeam" Type="int" />
+          <Property Name="DrawsTeam" Type="int" />
+          <Property Name="points" Type="int" />
+        </EntityType>
+        <Association Name="FK_StatsTeam_Speler">
+          <End Role="Speler" Type="Self.Speler" Multiplicity="0..1" />
+          <End Role="StatsTeam" Type="Self.StatsTeam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Speler">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StatsTeam">
+              <PropertyRef Name="speler_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StatsTeam_StatsTeamExtended">
+          <End Role="StatsTeamExtended" Type="Self.StatsTeamExtended" Multiplicity="0..1" />
+          <End Role="StatsTeam" Type="Self.StatsTeam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StatsTeamExtended">
+              <PropertyRef Name="spelerId" />
+            </Principal>
+            <Dependent Role="StatsTeam">
+              <PropertyRef Name="speler_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FifaModelStoreContainer">
+          <EntitySet Name="Speler" EntityType="Self.Speler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StatsTeam" EntityType="Self.StatsTeam" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StatsTeamExtended" EntityType="Self.StatsTeamExtended" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_StatsTeam_Speler" Association="Self.FK_StatsTeam_Speler">
+            <End Role="Speler" EntitySet="Speler" />
+            <End Role="StatsTeam" EntitySet="StatsTeam" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StatsTeam_StatsTeamExtended" Association="Self.FK_StatsTeam_StatsTeamExtended">
+            <End Role="StatsTeamExtended" EntitySet="StatsTeamExtended" />
+            <End Role="StatsTeam" EntitySet="StatsTeam" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FifaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="spelerModel" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Spelers" EntityType="FifaModel.Speler" />
+          <EntitySet Name="StatsTeams" EntityType="FifaModel.StatsTeam" />
+          <EntitySet Name="StatsTeamExtendeds" EntityType="FifaModel.StatsTeamExtended" />
+          <AssociationSet Name="FK_StatsTeam_Speler" Association="FifaModel.FK_StatsTeam_Speler">
+            <End Role="Speler" EntitySet="Spelers" />
+            <End Role="StatsTeam" EntitySet="StatsTeams" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StatsTeam_StatsTeamExtended" Association="FifaModel.FK_StatsTeam_StatsTeamExtended">
+            <End Role="StatsTeamExtended" EntitySet="StatsTeamExtendeds" />
+            <End Role="StatsTeam" EntitySet="StatsTeams" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Speler">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="naam" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="flag" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="score" Type="Int32" />
+          <Property Name="platform" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="StatsTeam" Relationship="FifaModel.FK_StatsTeam_Speler" FromRole="Speler" ToRole="StatsTeam" />
+        </EntityType>
+        <EntityType Name="StatsTeam">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="speler_id" Type="Int32" />
+          <Property Name="extended_id" Type="Int32" />
+          <Property Name="goals_per_game" Type="Double" />
+          <Property Name="goals_against_per_game" Type="Double" />
+          <Property Name="goal_ratio" Type="Double" />
+          <Property Name="favorit_team" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="scored_most_with" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="most_hated_player" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="most_played_against" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="seasons_played" Type="Int32" />
+          <Property Name="seasons_played_current_division" Type="Int32" />
+          <Property Name="highest_division" Type="Int32" />
+          <Property Name="relegations" Type="Int32" />
+          <NavigationProperty Name="Speler" Relationship="FifaModel.FK_StatsTeam_Speler" FromRole="StatsTeam" ToRole="Speler" />
+          <NavigationProperty Name="StatsTeamExtended" Relationship="FifaModel.FK_StatsTeam_StatsTeamExtended" FromRole="StatsTeam" ToRole="StatsTeamExtended" />
+        </EntityType>
+        <EntityType Name="StatsTeamExtended">
+          <Key>
+            <PropertyRef Name="spelerId" />
+          </Key>
+          <Property Name="spelerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SeasonTeam" Type="Int32" />
+          <Property Name="WinsTeam" Type="Int32" />
+          <Property Name="LosesTeam" Type="Int32" />
+          <Property Name="DrawsTeam" Type="Int32" />
+          <Property Name="points" Type="Int32" />
+          <NavigationProperty Name="StatsTeam" Relationship="FifaModel.FK_StatsTeam_StatsTeamExtended" FromRole="StatsTeamExtended" ToRole="StatsTeam" />
+        </EntityType>
+        <Association Name="FK_StatsTeam_Speler">
+          <End Type="FifaModel.Speler" Role="Speler" Multiplicity="0..1" />
+          <End Type="FifaModel.StatsTeam" Role="StatsTeam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Speler">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StatsTeam">
+              <PropertyRef Name="speler_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StatsTeam_StatsTeamExtended">
+          <End Type="FifaModel.StatsTeamExtended" Role="StatsTeamExtended" Multiplicity="0..1" />
+          <End Type="FifaModel.StatsTeam" Role="StatsTeam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StatsTeamExtended">
+              <PropertyRef Name="spelerId" />
+            </Principal>
+            <Dependent Role="StatsTeam">
+              <PropertyRef Name="speler_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FifaModelStoreContainer" CdmEntityContainer="spelerModel">
+          <EntitySetMapping Name="Spelers">
+            <EntityTypeMapping TypeName="FifaModel.Speler">
+              <MappingFragment StoreEntitySet="Speler">
+                <ScalarProperty Name="platform" ColumnName="platform" />
+                <ScalarProperty Name="score" ColumnName="score" />
+                <ScalarProperty Name="flag" ColumnName="flag" />
+                <ScalarProperty Name="naam" ColumnName="naam" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StatsTeams">
+            <EntityTypeMapping TypeName="FifaModel.StatsTeam">
+              <MappingFragment StoreEntitySet="StatsTeam">
+                <ScalarProperty Name="relegations" ColumnName="relegations" />
+                <ScalarProperty Name="highest_division" ColumnName="highest_division" />
+                <ScalarProperty Name="seasons_played_current_division" ColumnName="seasons_played_current_division" />
+                <ScalarProperty Name="seasons_played" ColumnName="seasons_played" />
+                <ScalarProperty Name="most_played_against" ColumnName="most_played_against" />
+                <ScalarProperty Name="most_hated_player" ColumnName="most_hated_player" />
+                <ScalarProperty Name="scored_most_with" ColumnName="scored_most_with" />
+                <ScalarProperty Name="favorit_team" ColumnName="favorit_team" />
+                <ScalarProperty Name="goal_ratio" ColumnName="goal_ratio" />
+                <ScalarProperty Name="goals_against_per_game" ColumnName="goals_against_per_game" />
+                <ScalarProperty Name="goals_per_game" ColumnName="goals_per_game" />
+                <ScalarProperty Name="extended_id" ColumnName="extended_id" />
+                <ScalarProperty Name="speler_id" ColumnName="speler_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StatsTeamExtendeds">
+            <EntityTypeMapping TypeName="FifaModel.StatsTeamExtended">
+              <MappingFragment StoreEntitySet="StatsTeamExtended">
+                <ScalarProperty Name="points" ColumnName="points" />
+                <ScalarProperty Name="DrawsTeam" ColumnName="DrawsTeam" />
+                <ScalarProperty Name="LosesTeam" ColumnName="LosesTeam" />
+                <ScalarProperty Name="WinsTeam" ColumnName="WinsTeam" />
+                <ScalarProperty Name="SeasonTeam" ColumnName="SeasonTeam" />
+                <ScalarProperty Name="spelerId" ColumnName="spelerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

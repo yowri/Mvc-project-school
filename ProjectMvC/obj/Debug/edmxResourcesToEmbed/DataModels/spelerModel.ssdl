@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="FifaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Speler">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="naam" Type="varchar" MaxLength="50" />
+    <Property Name="flag" Type="varchar" MaxLength="50" />
+    <Property Name="score" Type="int" />
+    <Property Name="platform" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="StatsTeam">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="speler_id" Type="int" />
+    <Property Name="extended_id" Type="int" />
+    <Property Name="goals_per_game" Type="float" />
+    <Property Name="goals_against_per_game" Type="float" />
+    <Property Name="goal_ratio" Type="float" />
+    <Property Name="favorit_team" Type="varchar" MaxLength="50" />
+    <Property Name="scored_most_with" Type="varchar" MaxLength="50" />
+    <Property Name="most_hated_player" Type="varchar" MaxLength="50" />
+    <Property Name="most_played_against" Type="varchar" MaxLength="50" />
+    <Property Name="seasons_played" Type="int" />
+    <Property Name="seasons_played_current_division" Type="int" />
+    <Property Name="highest_division" Type="int" />
+    <Property Name="relegations" Type="int" />
+  </EntityType>
+  <EntityType Name="StatsTeamExtended">
+    <Key>
+      <PropertyRef Name="spelerId" />
+    </Key>
+    <Property Name="spelerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SeasonTeam" Type="int" />
+    <Property Name="WinsTeam" Type="int" />
+    <Property Name="LosesTeam" Type="int" />
+    <Property Name="DrawsTeam" Type="int" />
+    <Property Name="points" Type="int" />
+  </EntityType>
+  <Association Name="FK_StatsTeam_Speler">
+    <End Role="Speler" Type="Self.Speler" Multiplicity="0..1" />
+    <End Role="StatsTeam" Type="Self.StatsTeam" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Speler">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="StatsTeam">
+        <PropertyRef Name="speler_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_StatsTeam_StatsTeamExtended">
+    <End Role="StatsTeamExtended" Type="Self.StatsTeamExtended" Multiplicity="0..1" />
+    <End Role="StatsTeam" Type="Self.StatsTeam" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StatsTeamExtended">
+        <PropertyRef Name="spelerId" />
+      </Principal>
+      <Dependent Role="StatsTeam">
+        <PropertyRef Name="speler_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="FifaModelStoreContainer">
+    <EntitySet Name="Speler" EntityType="Self.Speler" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="StatsTeam" EntityType="Self.StatsTeam" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="StatsTeamExtended" EntityType="Self.StatsTeamExtended" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_StatsTeam_Speler" Association="Self.FK_StatsTeam_Speler">
+      <End Role="Speler" EntitySet="Speler" />
+      <End Role="StatsTeam" EntitySet="StatsTeam" />
+    </AssociationSet>
+    <AssociationSet Name="FK_StatsTeam_StatsTeamExtended" Association="Self.FK_StatsTeam_StatsTeamExtended">
+      <End Role="StatsTeamExtended" EntitySet="StatsTeamExtended" />
+      <End Role="StatsTeam" EntitySet="StatsTeam" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

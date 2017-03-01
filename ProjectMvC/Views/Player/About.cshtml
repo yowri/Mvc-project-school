@@ -1,0 +1,59 @@
+﻿@model IEnumerable<ProjectMvC.DataModels.Speler>
+@{
+    ViewBag.Title = "About";
+}
+
+
+    <div id="board" class="leader-board board-ps4">
+       @{Html.RenderPartial("leaderboardPartial",Model);}
+    </div>
+<script>
+    $(function () {
+        // navigate to player
+        $('tr[data-href]').on('click', function () {
+            document.location = $(this).data('href');
+        });
+
+        //load more rows
+        var rowHeight = $('.board-ps4 #leader-board tr').slice(2).height();
+        var headerHeight = $('header').height() + 5;
+        var windowHeight = $(window).height();
+
+        var contentHeigt = windowHeight - headerHeight;
+
+        var amountRows = contentHeigt / rowHeight;
+
+        var amountRowsInt = Math.round(amountRows) +1;
+
+        var newAmountRows = amountRowsInt;
+
+        $('.board-ps4 #leader-board tr').slice(amountRowsInt).hide();
+
+
+        function loadMore() {
+            newAmountRows = newAmountRows + amountRowsInt;
+
+            console.log(amountRowsInt);
+            console.log(newAmountRows);
+
+            $('.board-ps4 #leader-board tr').slice(amountRowsInt).show();
+            $('.board-ps4 #leader-board tr').slice(newAmountRows).hide();
+
+            
+
+            $(window).bind('scroll', bindScroll);
+        }
+
+        function bindScroll() {
+            if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+                $(window).unbind('scroll');
+                loadMore();
+            }
+        }
+
+        $(window).scroll(bindScroll);
+
+
+
+    });
+</script>

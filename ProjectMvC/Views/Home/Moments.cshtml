@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "Moments";
+}
+<div id="gallery">
+    @*<div class="item i1"></div>
+    <div class="item i2"></div>
+    <div class="item i3"></div>
+    <div class="item i4"></div>
+    <div class="item i5"></div>
+    <div class="item i6"></div>
+    <div class="item i7"></div>*@
+</div>
+
+<script>
+    $(function () {
+
+        $('.content-wrapper').css('max-width', '100%');
+        $('.content-wrapper').css('padding', '2% 5%');
+
+
+        var temp = "<div class='cell' style='width:{width}px; height: {height}px; '><div class='cell-image' style='background-image: url(/images/moments/{index}.jpg)'><div class='cell-footer'></div></div></div>";
+        var w = 1, html = '', limitItem = 49;
+        for (var i = 0; i < limitItem; ++i) {
+            w = 300 + 200 * Math.random() << 0;
+            h = 200 + 200 * Math.random() << 0; 
+            html += temp.replace(/\{height\}/g, h).replace(/\{width\}/g, w).replace("{index}", i + 1);
+        }
+        $("#gallery").html(html);
+
+        var wall = new Freewall("#gallery");
+
+
+        wall.reset({
+            selector: '.cell',
+            animate: true,
+            cellW: 20,
+            cellH: 200,
+            onResize: function () {
+                wall.fitWidth();
+            }
+        });
+        wall.fitWidth();
+        // for scroll bar appear;
+        $(window).trigger("resize");
+    })
+
+</script>

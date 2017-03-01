@@ -1,0 +1,104 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>@ViewBag.Title - My ASP.NET MVC Application</title>
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+        @Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")
+        @Scripts.Render("~/bundles/jquery")
+    </head>
+    <body>
+        <header>
+            <nav id="home-nav" class="navbar navbar-inverse">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <img id="logo-main" src="@Url.Content("~/Images/logo.png")"/>
+                    </div>
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9">
+                        <ul class="nav navbar-nav" id="header-nav">
+                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                            <li>@Html.ActionLink("Leaderboards", "About", "Player")</li>
+                            <li>@Html.ActionLink("Moments", "Moments", "Home")</li>
+                            <li>
+                                @using (Html.BeginForm("Stats", "Home ", FormMethod.Post, new { @class = "form-platform" }))
+                                {
+                                    <select class="dropdown platform-dropdown">
+                                        <option value="ps4" selected="selected">PS4</option>
+                                        <option value="ps3">PS3</option>
+                                        <option value="360">XBOX 360</option>
+                                        <option value="one">XBOX One</option>
+                                        <option value="pc">PC</option>
+                                    </select>
+                                }
+                                <span class="glyphicon glyphicon-chevron-right header-chevron"></span>
+                            </li>
+                            
+                        </ul>
+                        
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <div id="body">
+            @RenderSection("featured", required: false)
+            <section class="content-wrapper clear-fix">
+                @RenderBody()
+                
+            </section>
+        </div>
+
+        
+        @RenderSection("scripts", required: false)
+        <script>
+
+
+    var platform;
+
+
+
+    $(function () {
+        $('.dropdown-header-menu').hide();
+        $(window).scroll(function () {
+            if ($(document).scrollTop() == 0) {
+                $('#logo-main').animate({ width: 300 }, 0);
+            } else {
+                $('#logo-main').animate({ width: 200 }, 0);
+            }
+        });
+
+        $('.platform-dropdown').hover(function () {
+            $('.header-chevron').css('color', '#FECF00');
+        }, function () {
+            $('.header-chevron').css('color', '#d29509');
+        });
+
+
+        $('#board').load('@Url.Action("leaderBoard", "Player", null, Request.Url.Scheme)');
+
+        $('#index-content').load('@Url.Action("indexPartial", "Home", null, Request.Url.Scheme)');
+
+
+        $('.platform-dropdown').change(function (e) {
+
+            platform = $('.platform-dropdown').val();
+
+            $.post('/Home/SetVariable',
+                { key: "platformKey", value: platform }, function (data) {
+
+                        $('#board').load('@Url.Action("leaderBoard", "Player", null, Request.Url.Scheme)');
+
+                        $('#index-content').load('@Url.Action("indexPartial", "Home", null, Request.Url.Scheme)');
+                    });
+
+                });
+
+
+
+            });
+
+        </script>
+    </body>
+</html>

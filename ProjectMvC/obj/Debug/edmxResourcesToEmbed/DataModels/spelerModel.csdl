@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="FifaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="spelerModel" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Spelers" EntityType="FifaModel.Speler" />
+    <EntitySet Name="StatsTeams" EntityType="FifaModel.StatsTeam" />
+    <EntitySet Name="StatsTeamExtendeds" EntityType="FifaModel.StatsTeamExtended" />
+    <AssociationSet Name="FK_StatsTeam_Speler" Association="FifaModel.FK_StatsTeam_Speler">
+      <End Role="Speler" EntitySet="Spelers" />
+      <End Role="StatsTeam" EntitySet="StatsTeams" />
+    </AssociationSet>
+    <AssociationSet Name="FK_StatsTeam_StatsTeamExtended" Association="FifaModel.FK_StatsTeam_StatsTeamExtended">
+      <End Role="StatsTeamExtended" EntitySet="StatsTeamExtendeds" />
+      <End Role="StatsTeam" EntitySet="StatsTeams" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Speler">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="naam" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="flag" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="score" Type="Int32" />
+    <Property Name="platform" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="StatsTeam" Relationship="FifaModel.FK_StatsTeam_Speler" FromRole="Speler" ToRole="StatsTeam" />
+  </EntityType>
+  <EntityType Name="StatsTeam">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="speler_id" Type="Int32" />
+    <Property Name="extended_id" Type="Int32" />
+    <Property Name="goals_per_game" Type="Double" />
+    <Property Name="goals_against_per_game" Type="Double" />
+    <Property Name="goal_ratio" Type="Double" />
+    <Property Name="favorit_team" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="scored_most_with" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="most_hated_player" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="most_played_against" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="seasons_played" Type="Int32" />
+    <Property Name="seasons_played_current_division" Type="Int32" />
+    <Property Name="highest_division" Type="Int32" />
+    <Property Name="relegations" Type="Int32" />
+    <NavigationProperty Name="Speler" Relationship="FifaModel.FK_StatsTeam_Speler" FromRole="StatsTeam" ToRole="Speler" />
+    <NavigationProperty Name="StatsTeamExtended" Relationship="FifaModel.FK_StatsTeam_StatsTeamExtended" FromRole="StatsTeam" ToRole="StatsTeamExtended" />
+  </EntityType>
+  <EntityType Name="StatsTeamExtended">
+    <Key>
+      <PropertyRef Name="spelerId" />
+    </Key>
+    <Property Name="spelerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SeasonTeam" Type="Int32" />
+    <Property Name="WinsTeam" Type="Int32" />
+    <Property Name="LosesTeam" Type="Int32" />
+    <Property Name="DrawsTeam" Type="Int32" />
+    <Property Name="points" Type="Int32" />
+    <NavigationProperty Name="StatsTeam" Relationship="FifaModel.FK_StatsTeam_StatsTeamExtended" FromRole="StatsTeamExtended" ToRole="StatsTeam" />
+  </EntityType>
+  <Association Name="FK_StatsTeam_Speler">
+    <End Type="FifaModel.Speler" Role="Speler" Multiplicity="0..1" />
+    <End Type="FifaModel.StatsTeam" Role="StatsTeam" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Speler">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="StatsTeam">
+        <PropertyRef Name="speler_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_StatsTeam_StatsTeamExtended">
+    <End Type="FifaModel.StatsTeamExtended" Role="StatsTeamExtended" Multiplicity="0..1" />
+    <End Type="FifaModel.StatsTeam" Role="StatsTeam" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StatsTeamExtended">
+        <PropertyRef Name="spelerId" />
+      </Principal>
+      <Dependent Role="StatsTeam">
+        <PropertyRef Name="speler_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

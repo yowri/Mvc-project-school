@@ -1,0 +1,14 @@
+﻿@model IEnumerable<ProjectMvC.Models.SerializedModelSpeler>
+
+
+
+
+@{
+    ViewBag.Title = "Home Page";
+}
+<div id="background">
+    <div class="content-wrapper" id="index-content">
+        @{Html.RenderPartial("indexPartial", Model);}
+    </div>
+</div>
+

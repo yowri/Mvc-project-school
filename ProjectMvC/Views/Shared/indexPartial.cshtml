@@ -1,0 +1,39 @@
+﻿@model IEnumerable<ProjectMvC.Models.SerializedModelSpeler>
+@using ProjectMvC.Models
+
+<div class="search-player">
+    @using (Html.BeginForm("Stats", "Player", FormMethod.Post, new { name = "src-frm", id = "src-frm" }))
+    {
+        <input autocomplete="off" id="search-player-field" placeholder="Player Name" value="@ViewBag.Message" name="speler" />
+        <input type="submit" value="SEARCH" id="search-btn" />
+    }
+</div>
+
+
+
+<script>
+
+    $(function () {
+
+        var players = @dbModel.JavaScriptConvert.SerializeObject(Model)
+
+            console.log(players);
+
+        $('#src-frm').submit(function (e) {
+
+            for (var i = 0; i < players.length ; i++) {
+                    if ($("input:first").val() == players[i].naam) {
+                        document.location = "Player/Stats?id="+players[i].id;
+                    }
+
+
+            }
+            document.getElementById('search-player-field').placeholder = "geen speler gevonden op dit platform";
+
+            $('#search-player-field').addClass('formInvalid').val('');
+
+            e.preventDefault();
+        });
+    });
+
+</script>
